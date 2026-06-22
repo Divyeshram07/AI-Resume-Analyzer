@@ -1,3 +1,9 @@
+![Python](https://img.shields.io/badge/Python-3.12-blue)
+![React](https://img.shields.io/badge/React-Frontend-blue)
+![FastAPI](https://img.shields.io/badge/FastAPI-Backend-green)
+![NLP](https://img.shields.io/badge/NLP-AI-orange)
+
+
 # AI Resume Analyzer & ATS Optimization Platform
 
 An AI-powered SaaS platform that analyzes resumes against job descriptions using NLP and transformer embeddings. The system calculates semantic match scores, ATS scores, identifies skill gaps, recommends suitable roles, generates AI-driven suggestions, and exports detailed PDF reports.
