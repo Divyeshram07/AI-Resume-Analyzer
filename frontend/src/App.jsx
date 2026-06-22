@@ -102,7 +102,7 @@ function App() {
           transition={{ duration: 0.7 }}
           className="text-center mb-16"
         >
-          <h1 className="text-6xl font-bold mb-5 leading-tight">
+          <h1 className="text-5xl md:text-6xl font-bold mb-5 leading-tight max-w-5xl mx-auto">
             AI Resume Analyzer &
             <span className="bg-gradient-to-r from-blue-400 to-purple-500 bg-clip-text text-transparent">
               {" "}Job Matcher
@@ -115,7 +115,7 @@ function App() {
           </p>
         </motion.div>
 
-        <div className="grid md:grid-cols-2 gap-8 mb-12">
+        <div className="grid md:grid-cols-2 gap-8 mb-16">
           <div className="bg-white/5 backdrop-blur-xl border border-gray-800 rounded-3xl p-8 shadow-xl">
             <h2 className="text-2xl font-semibold mb-6 flex items-center gap-3">
               <Upload className="text-blue-400" />
