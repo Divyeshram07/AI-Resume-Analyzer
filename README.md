@@ -66,8 +66,6 @@ Resume Upload → Resume Parsing → NLP Skill Extraction → Semantic Matching 
 * Circular score gauges
 * Skills visualization
 
-(Add screenshots here after uploading them)
-
 ---
 
 ## Core Features Explained
