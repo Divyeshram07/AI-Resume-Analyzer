@@ -63,7 +63,7 @@ async def analyze_resume(
         jd_skills = extract_skills(jd)
 
         # Calculate match score
-        match_score = float(calculate_match_score(resume_text, jd))
+        match_score = calculate_match_score(resume_text, jd)
 
         # Missing skills
         missing_skills = list(set(jd_skills) - set(resume_skills))
