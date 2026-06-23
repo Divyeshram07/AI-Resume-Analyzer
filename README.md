@@ -1,8 +1,7 @@
-![Python](https://img.shields.io/badge/Python-3.12-blue)
+![Python](https://img.shields.io/badge/Python-3.11-blue)
 ![React](https://img.shields.io/badge/React-Frontend-blue)
 ![FastAPI](https://img.shields.io/badge/FastAPI-Backend-green)
-![NLP](https://img.shields.io/badge/NLP-AI-orange)
-
+![ML](https://img.shields.io/badge/MachineLearning-AI-orange)
 
 # AI Resume Analyzer & ATS Optimization Platform
 
@@ -199,6 +198,10 @@ POST /download-report
 * LLM-powered Resume Optimization
 
 ---
+
+## Live Demo
+Frontend: https://ai-resume-analyzer-green-iota.vercel.app/
+Backend: https://ai-resume-analyzer-jhzb.onrender.com
 
 ## Author
 
