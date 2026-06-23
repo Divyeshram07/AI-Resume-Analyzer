@@ -4,13 +4,18 @@ import re
 nlp = spacy.load("en_core_web_sm")
 
 SKILLS_DB = [
-    "python", "java", "c++", "javascript",
+    "python", "java", "c++", "c", "javascript", "typescript",
+    "html", "css", "react", "node.js", "express", "fastapi",
+    "sql", "mysql", "postgresql", "mongodb",
     "machine learning", "deep learning", "nlp",
     "tensorflow", "pytorch", "scikit-learn",
-    "sql", "mongodb", "mysql",
-    "react", "node.js", "fastapi",
-    "docker", "kubernetes", "aws",
-    "git", "linux", "data structures", "algorithms"
+    "pandas", "numpy", "matplotlib",
+    "docker", "kubernetes", "aws", "azure", "gcp",
+    "git", "github", "linux",
+    "data structures", "algorithms", "oop",
+    "rest api", "microservices", "ci/cd",
+    "flask", "django", "streamlit",
+    "genai", "llm", "rag"
 ]
 
 def clean_text(text):
