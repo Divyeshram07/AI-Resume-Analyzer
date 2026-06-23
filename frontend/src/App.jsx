@@ -15,6 +15,10 @@ import {
   ResponsiveContainer,
 } from "recharts";
 
+const API =
+  import.meta.env.VITE_API_URL ||
+  "https://ai-resume-analyzer-jhzb.onrender.com";
+
 function App() {
   const [resume, setResume] = useState(null);
   const [jd, setJd] = useState("");
@@ -34,10 +38,9 @@ function App() {
     try {
       setLoading(true);
 
-      const response = await axios.post(
-        "http://127.0.0.1:8000/analyze",
-        formData
-      );
+      const response = await axios.post(`${API}/analyze`, formData, {
+        timeout: 120000,
+      });
 
       setResult(response.data);
       toast.success("Resume analyzed successfully");
@@ -52,9 +55,11 @@ function App() {
   const downloadReport = async () => {
     try {
       const response = await axios.post(
-        "http://127.0.0.1:8000/download-report",
+        `${API}/download-report`,
         result,
-        { responseType: "blob" }
+        {
+          responseType: "blob",
+        }
       );
 
       const url = window.URL.createObjectURL(new Blob([response.data]));
@@ -71,8 +76,8 @@ function App() {
 
   const chartData = result
     ? [
-        { name: "Matched Skills", value: result.resume_skills.length },
-        { name: "Missing Skills", value: result.missing_skills.length },
+        { name: "Matched Skills", value: result.resume_skills?.length || 0 },
+        { name: "Missing Skills", value: result.missing_skills?.length || 0 },
       ]
     : [];
 
@@ -96,7 +101,7 @@ function App() {
       </nav>
 
       <div className="relative z-10 max-w-7xl mx-auto px-8 py-10">
-        <motion.div
+              <motion.div
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.7 }}
@@ -116,7 +121,7 @@ function App() {
         </motion.div>
 
         <div className="grid md:grid-cols-2 gap-8 mb-16">
-          <div className="bg-white/5 backdrop-blur-xl border border-gray-800 rounded-3xl p-8 shadow-xl">
+          <div className="bg-white/5 backdrop-blur-xl border border-gray-800 rounded-3xl p-8 shadow-xl hover:shadow-blue-500/10 hover:scale-[1.02] transition duration-300">
             <h2 className="text-2xl font-semibold mb-6 flex items-center gap-3">
               <Upload className="text-blue-400" />
               Upload Resume
@@ -136,7 +141,7 @@ function App() {
             </label>
           </div>
 
-          <div className="bg-white/5 backdrop-blur-xl border border-gray-800 rounded-3xl p-8 shadow-xl">
+          <div className="bg-white/5 backdrop-blur-xl border border-gray-800 rounded-3xl p-8 shadow-xl hover:shadow-purple-500/10 hover:scale-[1.02] transition duration-300">
             <h2 className="text-2xl font-semibold mb-6 flex items-center gap-3">
               <Briefcase className="text-purple-400" />
               Job Description
@@ -171,7 +176,7 @@ function App() {
 
         {result && (
           <>
-                        <div className="grid md:grid-cols-3 gap-8 mb-12">
+            <div className="grid md:grid-cols-3 gap-8 mb-12">
               <div className="bg-white/5 backdrop-blur-xl p-8 rounded-3xl border border-gray-800 shadow-xl hover:scale-105 transition">
                 <h2 className="text-lg mb-6 text-center text-gray-400">
                   Match Score
@@ -179,7 +184,7 @@ function App() {
                 <div className="w-40 mx-auto">
                   <CircularProgressbar
                     value={result.match_score}
-                    text={`${result.match_score.toFixed(1)}%`}
+                    text={`${Math.round(result.match_score)}%`}
                     styles={buildStyles({
                       textColor: "#fff",
                       pathColor: "#3B82F6",
@@ -196,7 +201,7 @@ function App() {
                 <div className="w-40 mx-auto">
                   <CircularProgressbar
                     value={result.ats_score}
-                    text={`${result.ats_score}%`}
+                    text={`${Math.round(result.ats_score)}%`}
                     styles={buildStyles({
                       textColor: "#fff",
                       pathColor: "#10B981",
@@ -228,15 +233,16 @@ function App() {
                 </ResponsiveContainer>
               </div>
             </div>
-
-            <div className="grid md:grid-cols-2 gap-8 mb-10">
-              <div className="bg-white/5 backdrop-blur-xl p-8 rounded-3xl border border-gray-800 shadow-xl">
-                <h2 className="text-2xl font-bold mb-6">Detected Skills</h2>
+                        <div className="grid md:grid-cols-2 gap-8 mb-10">
+              <div className="bg-white/5 backdrop-blur-xl p-8 rounded-3xl border border-gray-800 shadow-xl hover:scale-[1.02] transition">
+                <h2 className="text-2xl font-bold mb-6 text-green-400">
+                  Detected Skills
+                </h2>
                 <div className="flex flex-wrap gap-3">
-                  {result.resume_skills.map((skill, index) => (
+                  {(result.resume_skills || []).map((skill, index) => (
                     <span
                       key={index}
-                      className="bg-green-600/80 px-4 py-2 rounded-xl"
+                      className="bg-green-600/80 px-4 py-2 rounded-xl hover:scale-105 transition"
                     >
                       {skill}
                     </span>
@@ -244,13 +250,15 @@ function App() {
                 </div>
               </div>
 
-              <div className="bg-white/5 backdrop-blur-xl p-8 rounded-3xl border border-gray-800 shadow-xl">
-                <h2 className="text-2xl font-bold mb-6">Missing Skills</h2>
+              <div className="bg-white/5 backdrop-blur-xl p-8 rounded-3xl border border-gray-800 shadow-xl hover:scale-[1.02] transition">
+                <h2 className="text-2xl font-bold mb-6 text-red-400">
+                  Missing Skills
+                </h2>
                 <div className="flex flex-wrap gap-3">
-                  {result.missing_skills.map((skill, index) => (
+                  {(result.missing_skills || []).map((skill, index) => (
                     <span
                       key={index}
-                      className="bg-red-600/80 px-4 py-2 rounded-xl"
+                      className="bg-red-600/80 px-4 py-2 rounded-xl hover:scale-105 transition"
                     >
                       {skill}
                     </span>
@@ -259,13 +267,15 @@ function App() {
               </div>
             </div>
 
-            <div className="bg-white/5 backdrop-blur-xl p-8 rounded-3xl border border-gray-800 shadow-xl mb-10">
-              <h2 className="text-2xl font-bold mb-6">Recommended Roles</h2>
+            <div className="bg-white/5 backdrop-blur-xl p-8 rounded-3xl border border-gray-800 shadow-xl mb-10 hover:scale-[1.01] transition">
+              <h2 className="text-2xl font-bold mb-6 text-blue-400">
+                Recommended Roles
+              </h2>
               <div className="flex flex-wrap gap-3">
-                {result.recommended_roles.map((role, index) => (
+                {(result.recommended_roles || []).map((role, index) => (
                   <span
                     key={index}
-                    className="bg-blue-600/80 px-4 py-2 rounded-xl"
+                    className="bg-blue-600/80 px-4 py-2 rounded-xl hover:scale-105 transition"
                   >
                     {role}
                   </span>
@@ -273,19 +283,26 @@ function App() {
               </div>
             </div>
 
-            <div className="bg-white/5 backdrop-blur-xl p-8 rounded-3xl border border-gray-800 shadow-xl mb-10">
-              <h2 className="text-2xl font-bold mb-6">AI Suggestions</h2>
+            <div className="bg-white/5 backdrop-blur-xl p-8 rounded-3xl border border-gray-800 shadow-xl mb-10 hover:scale-[1.01] transition">
+              <h2 className="text-2xl font-bold mb-6 text-yellow-400">
+                AI Suggestions
+              </h2>
               <ul className="space-y-4 text-gray-300">
-                {result.suggestions.map((s, index) => (
-                  <li key={index}>• {s}</li>
+                {(result.suggestions || []).map((s, index) => (
+                  <li key={index} className="hover:text-white transition">
+                    • {s}
+                  </li>
                 ))}
               </ul>
             </div>
-                        <div className="bg-white/5 backdrop-blur-xl p-8 rounded-3xl border border-gray-800 shadow-xl mb-10">
-              <h2 className="text-2xl font-bold mb-6">Interview Questions</h2>
+
+            <div className="bg-white/5 backdrop-blur-xl p-8 rounded-3xl border border-gray-800 shadow-xl mb-10 hover:scale-[1.01] transition">
+              <h2 className="text-2xl font-bold mb-6 text-purple-400">
+                Interview Questions
+              </h2>
               <ul className="space-y-4 text-gray-300">
-                {result.interview_questions.map((q, index) => (
-                  <li key={index}>
+                {(result.interview_questions || []).map((q, index) => (
+                  <li key={index} className="hover:text-white transition">
                     <span className="text-blue-400 font-semibold">
                       Q{index + 1}:
                     </span>{" "}
@@ -307,15 +324,8 @@ function App() {
           </>
         )}
 
-        {!result && !loading && (
-          <div className="text-center py-20 text-gray-500">
-            <h2 className="text-2xl mb-3">No Analysis Yet</h2>
-            <p>Upload resume and analyze to see AI insights dashboard.</p>
-          </div>
-        )}
-
         <footer className="mt-20 py-8 text-center text-gray-500 border-t border-gray-800">
-          Built with React, FastAPI, NLP & Sentence Transformers
+          Built with React, FastAPI, NLP & Machine Learning
         </footer>
       </div>
     </div>
